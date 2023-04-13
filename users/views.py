@@ -39,7 +39,7 @@ def registration(requset):
 
 
 @login_required
-def profile(request):
+def profile_page_view(request):
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
