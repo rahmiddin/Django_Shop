@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'store.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'rahmidin',
+        'NAME': 'shop',
+        'PASSWORD': 'Wwefan123!',
+        'HOST': '127.0.0.1',
+        'PORT': 5432,
     }
 }
 
@@ -151,3 +155,5 @@ LOGOUT_REDIRECT_URL = '/'
 #     EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 #     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 #     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+
+
