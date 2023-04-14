@@ -1,35 +1,41 @@
-from django.shortcuts import render, HttpResponseRedirect
-from products.models import Product, Basket, ProductCategory
-from users.models import User
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.shortcuts import HttpResponseRedirect
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
+
+from common.views import TitleMixin
+from products.models import Basket, Product, ProductCategory
 
 # Create your views here.
 
 
-def home_view(request):
-    context = {'title': 'Store'}
-    return render(request, 'products/index.html', context)
+class HomeView(TitleMixin, TemplateView):
+    """ Class for rendering home(index) templates """
+    template_name = 'products/index.html'
+    title = 'VonasahStore'
 
 
-def products_page_view(request, category_id=None, page_number=1):
-    products = Product.objects.filter(category_id=category_id) if category_id \
-        else Product.objects.all()
-    per_page = 3
-    paginator = Paginator(products, per_page)
-    product_paginator = paginator.page(page_number)
+class ProductView(TitleMixin, ListView):
+    """ Class for rendering products template and generate Product item list """
+    model = Product
+    template_name = 'products/products.html'
+    paginate_by = 3
+    title = 'Store - Catalog'
 
-    context = {
-        'title': 'Store - Catalog',
-        'categories': ProductCategory.objects.all(),
-        'products': product_paginator,
-    }
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductView, self).get_context_data()
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
-    return render(request, 'products/products.html', context=context)
+    def get_queryset(self):
+        queryset = super(ProductView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=category_id) if category_id else queryset
 
 
 @login_required
 def basket_add(request, product_id):
+    """ Class for add product to user basket or create user basket if basket does not exists """
     product = Product.objects.get(id=product_id)
     baskets = Basket.objects.filter(user=request.user, product=product)
     if not baskets.exists():
@@ -39,8 +45,7 @@ def basket_add(request, product_id):
         basket.quantity += 1
         basket.save()
 
-    return HttpResponseRedirect(request.META['HTTP_REFERER']) \
-
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 @login_required

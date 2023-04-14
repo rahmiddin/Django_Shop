@@ -1,12 +1,16 @@
 from django.contrib import admin
-from products.views import Product, ProductCategory, Basket
+
+from products.views import Basket, Product, ProductCategory
+
 # Register your models here.
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'quantity', 'category')
-    fields = ('name', 'description', ('price', 'quantity'), 'image', 'category')
+    fields = ('name', 'description',
+              ('price', 'quantity'),
+              'image', 'category')
     search_fields = ('name', )
     ordering = ('category', )
 
