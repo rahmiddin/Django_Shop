@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 
     # OAuth2
     'allauth',
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'store.urls'
@@ -96,6 +98,15 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -152,15 +163,15 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# Email
-# if DEBUG:
-#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# else:
-#     EMAIL_HOST = env('EMAIL_HOST')
-#     EMAIL_PORT = env('EMAIL_PORT')
-#     EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-#     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-#     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+
+# SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST_USER = 'rahmiddin.hasanov@bk.ru'
+EMAIL_HOST_PASSWORD = 'yQXwZukNRQXdwvvbGyd6'
+EMAIL_PORT = '465'
+EMAIL_USE_SSL = True
+SERVER_EMAIL = EMAIL_HOST_USER
 
 
 # OAuth
@@ -179,3 +190,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# Debug-toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost'
+]
+
+# Celery
+
+CELERY_BROKER_URL = 'redis://localhost:8090'
+CELERY_RESULT_BACKEND = 'redis://localhost:8090'

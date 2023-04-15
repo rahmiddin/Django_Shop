@@ -1,5 +1,5 @@
 {% extends 'products/base.html' %}
-{% load static %}
+{% load static cache %}
 
 {% block css %}
         <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
@@ -101,7 +101,7 @@
                     {% endfor %}
                     <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}" >
                         <a class="page-link"
-                           href="{% if page_obj.has_next %} ?page={{ page.obj.next_page_number }} {% else %} # {% endif %}">
+                           href="{% if page_obj.has_next %} ?page={{ page_obj.next_page_number }} {% else %} # {% endif %}">
                             Следующая
                         </a>
                     </li>
