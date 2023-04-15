@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # OAuth2
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+
     # App
     'products',
     'users',
@@ -156,4 +162,20 @@ LOGOUT_REDIRECT_URL = '/'
 #     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 #     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
+
+# OAuth
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'user',
+        ],
+    }
+}
 
