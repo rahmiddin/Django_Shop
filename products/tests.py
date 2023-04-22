@@ -1,8 +1,10 @@
+from http import HTTPStatus
+
 from django.test import TestCase
 from django.urls import reverse
-from http import HTTPStatus
-from products.models import Product, ProductCategory, Basket
-from users.models import User
+
+from products.models import Product, ProductCategory
+
 # Create your tests here.
 
 
@@ -44,5 +46,3 @@ class ProductViewTestCase(TestCase):
     def _common_tests(self, response):
         self.assertEquals(response.status_code, HTTPStatus.OK)
         self.assertTemplateUsed(response, 'products/products.html')
-
-

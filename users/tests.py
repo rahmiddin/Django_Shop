@@ -1,11 +1,9 @@
-from datetime import timedelta
 from http import HTTPStatus
 
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.timezone import now
 
-from users.models import EmailVerification, User
+from users.models import User
 
 
 class UserRegistrationViewTestCase(TestCase):

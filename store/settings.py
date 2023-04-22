@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)(q=t=z_w(v65^=k9vxe-1_9d9@wwf@(#&f=*8#s3)f4u+=dha
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-DOMAIN_NAME = 'http://localhost:8000'
+DOMAIN_NAME = 'http://127.0.0.1:8000'
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'debug_toolbar',
 
     # OAuth2
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     # App
     'products',
     'users',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -200,3 +202,12 @@ INTERNAL_IPS = [
 
 CELERY_BROKER_URL = 'redis://localhost:8090'
 CELERY_RESULT_BACKEND = 'redis://localhost:8090'
+
+
+# Stripe
+STRIPE_PUB_KEY = 'pk_test_51Mf3TNCzVrjUVpKeJSHX3MFG8V7HQHvWPVSwaA3297L64PaiyvZLTP' \
+                 'tArRsRm9kc36nHiiKCMgsWqBPMyiAE8YxL00cR9xGK7a'
+STRIPE_SEC_KEY = 'sk_test_51Mf3TNCzVrjUVpKeBwJAGkGxegQ1z0rgAQAImzMxzSjQS4UFNBbTaGP' \
+                 'N75bQ3SWjMTaAMNuaSYdmafX0fExLw9ox00IV8iiXn8'
+
+STRIPE_WEBHOOK_SECRET = 'whsec_2f77ad51d5d947b06997a678f7974afe0d6b7a80d48baa64c861fd9aabd6a400'

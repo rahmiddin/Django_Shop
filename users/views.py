@@ -1,14 +1,14 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from common.views import TitleMixin
 from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
-from users.models import User, EmailVerification
+from users.models import EmailVerification, User
 
 # Create your views here.
 
@@ -28,6 +28,7 @@ class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('users:login')
     success_message = 'Вы зарегестрировались'
     title = 'Регистрация'
+
 
 class UserProfileView(LoginRequiredMixin, TitleMixin, UpdateView):
     """ Class for rendering user-profile templates and change user info on profile templates """

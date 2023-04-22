@@ -1,13 +1,10 @@
-from datetime import timedelta
-from uuid import uuid4
-
 from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
                                        UserCreationForm)
-from django.utils.timezone import now
 
-from users.models import EmailVerification, User
+from users.models import User
 from users.tasks import send_email_verification
+
 
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
