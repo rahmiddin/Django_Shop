@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+
 import environ
 
 env = environ.Env(
@@ -55,7 +56,6 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 DOMAIN_NAME = env('DOMAIN_NAME')
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'debug_toolbar',
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     # OAuth2
     'allauth',
@@ -78,7 +80,8 @@ INSTALLED_APPS = [
     # App
     'products',
     'users',
-    'orders'
+    'orders',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +115,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'store.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -163,7 +165,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -177,14 +178,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    BASE_DIR / 'static',
-)
+
+if DEBUG:
+    STATICFILES_DIRS = (
+        BASE_DIR / 'static',
+    )
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -200,7 +204,6 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-
 # SMTP
 if DEBUG:
     EMAIL_BACKEND = env('EMAIL_BACKEND')
@@ -211,7 +214,6 @@ else:
     EMAIL_PORT = env('EMAIL_PORT')
     EMAIL_USE_SSL = env('EMAIL_USE_SSL')
     SERVER_EMAIL = EMAIL_HOST_USER
-
 
 # OAuth
 AUTHENTICATION_BACKENDS = [
@@ -240,10 +242,19 @@ INTERNAL_IPS = [
 CELERY_BROKER_URL = F'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_RESULT_BACKEND = F'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-
 # Stripe
 STRIPE_PUB_KEY = env('STRIPE_PUB_KEY')
 STRIPE_SEC_KEY = env('STRIPE_SEC_KEY')
 
 STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 
+
+# Rest-framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 3,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}

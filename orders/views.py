@@ -20,16 +20,19 @@ stripe.api_key = settings.STRIPE_SEC_KEY
 
 
 class SuccessTemplateView(TitleMixin, TemplateView):
+    """  Class for render success page after successful payment """
     template_name = 'orders/success.html'
     title = 'Спасибо за заказ!'
 
 
 class CancelTemplateView(TitleMixin, TemplateView):
+    """  Class for render success page after unsuccessful payment """
     template_name = 'orders/cancel.html'
     title = 'Спасибо за заказ!'
 
 
 class OrderListView(TitleMixin, ListView):
+    """  Class for render order page with all order """
     template_name = 'orders/orders.html'
     title = 'Store - Заказы'
     queryset = Order.objects.all()
@@ -41,11 +44,12 @@ class OrderListView(TitleMixin, ListView):
 
 
 class OrderDetailView(DetailView):
+    """  Class for render order page with choose order """
     template_name = 'orders/order.html'
     model = Order
 
     def get_object(self, queryset=model.objects.all()):
-        return queryset.get(initiator_id=self.request.user.id)
+        return queryset.filter(initiator_id=self.request.user.id)
 
     def get_context_data(self, **kwargs):
         context = super(OrderDetailView, self).get_context_data(**kwargs)
@@ -77,6 +81,7 @@ class OrderCreateView(CreateView):
 
 @csrf_exempt
 def stripe_webhook_view(request):
+    """  Get stripe webhook for order_id """
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
